@@ -17,7 +17,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Primary Category:</mat-label>
-        <mat-select placeholder="- Options -">
+        <mat-select (selectionChange)="primCatChange($event)" placeholder="- Options -">
           @for(cat of primCats; track cat.id) {
             <mat-option [value]="cat.id">
               {{ cat.description }}
@@ -27,7 +27,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Sub Category:</mat-label>
-        <mat-select placeholder="- Options -">
+        <mat-select (selectionChange)="subCatChange($event)" placeholder="- Options -">
           @for(cat of subCats; track cat.id) {
           <mat-option [value]="cat.id">
             {{ cat.description }}

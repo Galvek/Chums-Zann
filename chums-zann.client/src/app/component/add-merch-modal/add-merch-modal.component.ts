@@ -56,7 +56,29 @@ export class AddMerchModalComponent {
   primCats: PrimaryCategory[] = [];
   subCats: SubCategory[] = [];
 
-  merch: Merchandise = this.data;
+  merch: Merchandise = {
+    id: 0,
+    name: "",
+    description: "",
+    price: 0,
+    image: "",
+    primCategory: {
+      id: 0,
+      description: ""
+    },
+    subCategory: {
+      id: 0,
+      primaryCategory: {
+        id: 0,
+        description: ""
+      },
+      description: ""
+    },
+    onSale: false,
+    outOfStock: false,
+    salePrice: 0,
+    saleDescription: ""
+  };
 
   fileToUpload: File = new File([], "empty.txt");
 
@@ -82,6 +104,30 @@ export class AddMerchModalComponent {
       .subscribe((cats) => {
         this.subCats = cats;
       });
+  }
+
+  primCatChange(event: MatSelectChange) {
+    var cat = this.primCats.find(c => c.id == event.value);
+    if (cat) {
+      this.merch.primCategory = {
+        id: cat.id,
+        description: cat.description
+      }
+    }
+  }
+
+  subCatChange(event: MatSelectChange) {
+    var cat = this.subCats.find(c => c.id == event.value);
+    if (cat) {
+      this.merch.subCategory = {
+        id: cat.id,
+        primaryCategory: {
+          id: this.merch.primCategory.id,
+          description: this.merch.primCategory.description
+        },
+        description: cat.description
+      }
+    }
   }
 
   fileSelected(event: any): void {
