@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Add New Sub Category</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Primary Category:</mat-label>
+    <mat-select [(ngModel)]="selectedValue" placeholder="- Options -">
+      <mat-option *ngFor="let cat of primCats" [value]="cat.id">
+        {{ cat.description }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description:</mat-label>
+    <input matInput [(ngModel)]="description" />
+  </mat-form-field>
+  <br />
+  <mat-label>{{ saveResult() }}</mat-label>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close (click)="close()">Close</button>
+  <button mat-button [mat-dialog-close]="true" (click)="save()">Add</button>
+</mat-dialog-actions>

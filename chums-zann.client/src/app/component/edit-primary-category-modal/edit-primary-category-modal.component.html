@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Edit Primary Category</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Description:</mat-label>
+    <input matInput [(ngModel)]="description" />
+  </mat-form-field>
+  <br />
+  <mat-label>{{ saveResult() }}</mat-label>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close (click)="close()">Close</button>
+  <button mat-button [mat-dialog-close]="true" (click)="save()">Save</button>
+</mat-dialog-actions>

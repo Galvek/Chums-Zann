@@ -1,0 +1,28 @@
+<div>
+  <mat-toolbar style="background-color: #101414; ">
+    <span style="flex: 2 1 auto;"></span>
+    <span>Chum's Spirits Ltd.</span>
+    <span style="flex: 8 1 auto;"></span>
+    <span style="padding-top: 8px;">
+      <mat-icon style="font-size: 20px;">phone</mat-icon>
+    </span>
+    <mat-label style="font-size: 14px;">(401) 568-2570</mat-label>
+    <span style="flex: 1 1 auto;"></span>
+    <span><!--<a href="#" routerLink="/login">Log in</a>--></span>
+  </mat-toolbar>
+
+  <mat-toolbar class="headerNavBar">
+    <span style="flex: 1 1 auto;"></span>
+
+    <button mat-button (click)="onClick(0, 0);">All</button>
+    @for (cat of primCats; track cat) {
+    <button mat-button (click)="onClick(cat.id, 0);">{{ cat.description }}</button>
+    }
+
+    <span style="flex: 1 1 auto;"></span>
+  </mat-toolbar>
+
+  <!--consider creating a banner or something more fancy-->
+  <img src="../assets/chums-storefront.jpg" style="width: 100%; height: 200px;" />
+
+</div>

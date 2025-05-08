@@ -1,0 +1,35 @@
+<mat-card class="card-container" style="background-color: #101414;">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>
+        {{ item.name }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        @if (item.onSale) {
+          {{ item.saleDescription }}
+        }
+      </mat-card-subtitle>
+      <img mat-card-lg-image src="data:image/png;base64, {{ item.image }}" />
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-footer style="padding-left: 15px;">
+    <span>{{ item.description }}</span>
+    <br />
+    @if (item.onSale) {
+    <span><s>${{ item.price }}</s> $ {{ item.salePrice }}</span>
+    } @else {
+    <span>${{ item.price }}</span>
+    }rsfsdf
+    <br />
+    <mat-chip-set>
+      <mat-chip (click)="primCategoryClick(item.primCategory.id);">
+        {{ item.primCategory.description }}
+      </mat-chip>
+      @if (item.subCategory.id !== 0) {
+      <mat-chip (click)="subCategoryClick(item.subCategory.id);">
+        {{ item.subCategory.description }}
+      </mat-chip>
+      }
+    </mat-chip-set>
+  </mat-card-footer>
+</mat-card>

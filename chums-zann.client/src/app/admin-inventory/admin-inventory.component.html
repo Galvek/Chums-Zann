@@ -1,0 +1,156 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" style="background-color: #101414;">
+  <mat-tab label="Inventory">
+    <div class="table-viewer-wrapper">
+
+      <div class="newBtn">
+        <button mat-raised-button (click)="openNewMerchDialog()">Add New Merchandise</button>
+      </div>
+
+      <table mat-table [dataSource]="inventory" class="myTable mat-elevation-z8">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let merch; index as i;">{{ (i + 1) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.price }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef>Quantity</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.quantity }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="primCategory">
+          <th mat-header-cell *matHeaderCellDef>Primary Category</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.primCategory.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="subCategory">
+          <th mat-header-cell *matHeaderCellDef>Sub Category</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.subCategory.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="onsale">
+          <th mat-header-cell *matHeaderCellDef>On Sale</th>
+          <td mat-cell *matCellDef="let merch;">
+            {{ merch.onSale ? 'Yes' : 'No' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="outofstock">
+          <th mat-header-cell *matHeaderCellDef>Out of Stock</th>
+          <td mat-cell *matCellDef="let merch;">
+            {{ merch.outOfStock ? 'Yes' : 'No' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="saleprice">
+          <th mat-header-cell *matHeaderCellDef>Sale Price</th>
+          <td mat-cell *matCellDef="let merch;">{{ merch.saleprice }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let merch;">
+            <mat-form-field style="padding-top: 5px;">
+              <mat-select (selectionChange)="onInvActionChange($event, merch)" placeholder="- Options -">
+                <mat-option [value]="1">Edit</mat-option>
+                <mat-option [value]="2">Delete</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="invColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: invColumns;"></tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Primary Categories">
+    <div class="table-viewer-wrapper">
+
+      <div class="newBtn">
+        <button mat-raised-button (click)="openNewPrimCatDialog()">Add New Category</button>
+      </div>
+
+      <table mat-table [dataSource]="primCats" class="myTable mat-elevation-z8">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let cat; index as i;">{{ (i + 1) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let cat;">{{ cat.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let cat;">
+            <mat-form-field style="padding-top: 5px;">
+              <mat-select (selectionChange)="onPrimCatActionChange($event, cat.id, cat.description)" placeholder="- Options -">
+                <mat-option [value]="1">Edit</mat-option>
+                <mat-option [value]="2">Delete</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="primCatColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: primCatColumns;"></tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Seconadry Categories">
+    <div class="table-viewer-wrapper">
+
+      <div class="newBtn">
+        <button mat-raised-button (click)="openNewSubCatDialog()">Add New Category</button>
+      </div>
+
+      <table mat-table [dataSource]="subCats" class="myTable mat-elevation-z8">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let cat; index as i;">{{ (i + 1) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="primCatDesc">
+          <th mat-header-cell *matHeaderCellDef>Primary Category</th>
+          <td mat-cell *matCellDef="let cat;">{{ cat.primaryCategory.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let cat;">{{ cat.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let cat;">
+            <mat-form-field style="padding-top: 5px;">
+              <mat-select (selectionChange)="onSubCatActionChange($event, cat.id, cat.primaryCategory, cat.description)" placeholder="- Options -">
+                <mat-option [value]="1">Edit</mat-option>
+                <mat-option [value]="2">Delete</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="subCatColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: subCatColumns;"></tr>
+      </table>
+    </div>
+  </mat-tab>
+</mat-tab-group>

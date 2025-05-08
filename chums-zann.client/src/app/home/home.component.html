@@ -1,0 +1,11 @@
+<app-header class="header" (updateInventory)="changeLiqourCategory($event);"></app-header>
+
+<div class="content">
+  <mat-grid-list role="list" cols="{{ cols }}" rowHeight="310px">
+    <mat-grid-tile role="listitem" *ngFor="let merch of inventory">
+      <app-merchandise-tile [item]="merch" (updateInventory)="changeLiqourCategory($event);"></app-merchandise-tile>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<app-footer class="footer"></app-footer>

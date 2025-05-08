@@ -1,0 +1,17 @@
+.table-viewer-wrapper {
+  border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  width: 99%;
+  margin: auto;
+  margin-top: 5px;
+  background-color: black;
+}
+
+.myTable {
+  table-layout: fixed;
+}
+
+.newBtn {
+  float: right;
+  padding: 5px;
+}

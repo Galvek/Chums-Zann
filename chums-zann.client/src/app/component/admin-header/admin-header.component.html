@@ -1,0 +1,51 @@
+<mat-toolbar style="background-color: black;">
+  <span>Chum's Spirits Ltd.</span>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-button routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</button>
+  <button mat-button routerLink="/admin/inventory" routerLinkActive="active">Manage Inventory</button>
+  <button mat-button routerLink="/admin/users" routerLinkActive="active">Manage Users</button>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-button (click)="logOutClick()">Log out</button>
+</mat-toolbar>
+
+<!--<div class="container-fluid m-0 p-0">
+
+  <div class="row m-0 p-0">
+    <div class="col-2">
+    </div>
+    <div class="col-4">
+      <div class="d-grid justify-content-center">
+        <h5>Chum's Spirits Ltd.</h5>
+      </div>
+    </div>
+    <div class="col-4 d-grid justify-content-md-end">
+      {{ currUser() }}
+    </div>
+    <div class="col-2 d-grid justify-content-md-end">
+      <a href="#" (click)="logOutClick()">Log out</a>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="container-fluid justify-content-center">
+      <div class="row">
+        <div class="col">
+          <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+              <li class="nav-item" routerLink="/admin/dashboard" routerLinkActive="active">
+                <button class="nav-link">Dashboard</button>
+              </li>
+              <li class="nav-item" routerLink="/admin/inventory" routerLinkActive="active">
+                <button class="nav-link">Inventory</button>
+              </li>
+              <li class="nav-item" routerLink="/admin/users" routerLinkActive="active">
+                <button class="nav-link">Admin Users</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+</div>-->

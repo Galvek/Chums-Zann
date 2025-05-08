@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Edit User</h2>
+<mat-dialog-content>
+  <mat-label>Username: {{ username() }}</mat-label>
+  <mat-form-field>
+    <mat-label>Password:</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password" />
+  </mat-form-field>
+  <button mat-icon-button matSuffic (click)="hide = !hide" type="button">
+    <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+  </button>
+  <br />
+  <mat-label>{{ saveResult() }}</mat-label>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close (click)="close()">Close</button>
+  <button mat-button [mat-dialog-close]="true" (click)="save()">Save</button>
+</mat-dialog-actions>
