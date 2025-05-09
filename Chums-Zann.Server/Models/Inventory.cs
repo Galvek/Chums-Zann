@@ -1,28 +1,31 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Text;
 
 namespace Chums_Zann.Server.Models
 {
     public class Inventory
     {
-        public Inventory() { }
+        private readonly IConfiguration Configuration;
+        private readonly string ConnStr;
+        public Inventory(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            ConnStr = Configuration["ConnectionStrings:DefaultConnection"] ?? "";
+        }
 
-        public static List<Merchandise> GetInventory(long primaryCategory = 0, long subCategory = 0)
+        public List<Merchandise> GetInventory(long primaryCategory = 0, long subCategory = 0)
         {
             List<Merchandise> inventory = [];
 
-            string connStr = "./chums.db";
             string query = 
                 @"SELECT m.[id],m.[name],m.[description], " +
                  "   m.[price],m.[image],m.[category],pc.[description]," +
                  "   m.[subcategory], sc.[description], m.[onsale], m.[outofstock]," +
                  "   m.[saleprice], m.[saledescription]" +
-                 " FROM [Merchandise] AS m" +
-                 " LEFT JOIN [PrimaryCategory] AS pc ON pc.[id] = m.[category]" +
-                 " LEFT JOIN [SubCategory] AS sc ON sc.[id] = m.[subcategory]";
+                 " FROM [Inventory].[dbo].[Merchandise] AS m" +
+                 " LEFT JOIN [Inventory].[dbo].[PrimaryCategory] AS pc ON pc.[id] = m.[category]" +
+                 " LEFT JOIN [Inventory].[dbo].[SubCategory] AS sc ON sc.[id] = m.[subcategory]";
 
             if (primaryCategory > 0 || subCategory > 0)
             {
@@ -39,14 +42,14 @@ namespace Chums_Zann.Server.Models
             }
             query += " ORDER BY m.[name];";
 
-            using(SqliteConnection conn = new SqliteConnection("Data Source="+connStr))
-            using(SqliteCommand cmd = conn.CreateCommand())
+            using(SqlConnection conn = new SqlConnection(ConnStr))
+            using(SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
                 cmd.CommandText = query;
                 if (primaryCategory > 0) cmd.Parameters.AddWithValue("@primCat", primaryCategory);
                 if (subCategory > 0) cmd.Parameters.AddWithValue("subCat", subCategory);
-                using(SqliteDataReader reader = cmd.ExecuteReader())
+                using(SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while(reader.Read())
                     {
@@ -56,7 +59,7 @@ namespace Chums_Zann.Server.Models
                             Name = reader.GetString(1),
                             Description = reader.IsDBNull(2) ? "" : reader.GetString(2),
                             Price = reader.GetDecimal(3),
-                            Image = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                            Image = reader.IsDBNull(4) ? "" : Convert.ToBase64String(reader.GetValue(4) as byte[] ?? []),
                             PrimCategory = reader.IsDBNull(6) ? new() : new()
                             {
                                 Id = reader.GetInt64(5),
@@ -79,18 +82,17 @@ namespace Chums_Zann.Server.Models
             return inventory;
         }
 
-        public static bool CreateItem(Merchandise merch)
+        public bool CreateItem(Merchandise merch)
         {
-            string connStr = "./chums.db";
             string query =
                 @"SELECT COUNT([id])" +
-                 " FROM [Merchandise]" +
+                 " FROM [Inventory].[dbo].[Merchandise]" +
                  " WHERE [name] = @name;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -104,23 +106,23 @@ namespace Chums_Zann.Server.Models
                 return false;
             }
 
-            query = 
-                "INSERT INTO [Merchandise]" +
+            query =
+                "INSERT INTO [Inventory].[dbo].[Merchandise]" +
                 " ([Name], [Description], [Price], [Image], [Category], [SubCategory],[OnSale],[OutOfStock],[SalePrice],[SaleDescription])" +
                 " VALUES" +
                 " (@name, @desc, @price, @img, @primCat, @subCat, @sale, @stock, @saleprice, @saleDesc);";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@name", merch.Name);
                     cmd.Parameters.AddWithValue("@desc", merch.Description);
                     cmd.Parameters.AddWithValue("@price", merch.Price);
-                    cmd.Parameters.Add("@img", SqliteType.Blob).Value = merch.Image;
+                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Encoding.UTF8.GetBytes(merch.Image);
                     cmd.Parameters.AddWithValue("@primCat", merch.PrimCategory.Id);
                     cmd.Parameters.AddWithValue("@subCat", merch.SubCategory.Id);
                     cmd.Parameters.AddWithValue("@sale", merch.OnSale);
@@ -138,11 +140,10 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool EditItem(Merchandise merch)
+        public bool EditItem(Merchandise merch)
         {
-            string connStr = "./chums.db";
             string query =
-                "UPDATE [Merchandise]" +
+                "UPDATE [Inventory].[dbo].[Merchandise]" +
                 " SET [Name] = @name, [Description] = @desc, [Price] = @price, [Image] = @img, [Category] = @primCat," +
                 "     [SubCategory] = @subCat, [OnSale] = @sale, [OutOfStock] = @stock, [SalePrice] = @saleprice," +
                 "     [SaleDescription] = @saleDesc" +
@@ -150,15 +151,15 @@ namespace Chums_Zann.Server.Models
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@name", merch.Name);
                     cmd.Parameters.AddWithValue("@desc", merch.Description);
                     cmd.Parameters.AddWithValue("@price", merch.Price);
-                    cmd.Parameters.Add("@img", SqliteType.Blob).Value = merch.Image;
+                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Encoding.UTF8.GetBytes(merch.Image);
                     cmd.Parameters.AddWithValue("@primCat", merch.PrimCategory.Id);
                     cmd.Parameters.AddWithValue("@subCat", merch.SubCategory.Id);
                     cmd.Parameters.AddWithValue("@sale", merch.OnSale);
@@ -177,16 +178,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool DeleteItem(long id)
+        public bool DeleteItem(long id)
         {
-            string connStr = "./chums.db";
             string query =
-                "DELETE FROM [Merchandise] WHERE [id] = @id;";
+                "DELETE FROM [Inventory].[dbo].[Merchandise] WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;

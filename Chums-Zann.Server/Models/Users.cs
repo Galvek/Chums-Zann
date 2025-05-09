@@ -19,7 +19,6 @@ namespace Chums_Zann.Server.Models
         {
             List<User> users = [];
 
-            string connStr = "./chums.db";
             string query = 
                 "SELECT [id], [username]" +
                 " FROM [User].[dbo].[Logins]";
@@ -27,7 +26,7 @@ namespace Chums_Zann.Server.Models
             if (id > 0) query += " WHERE [id] = @id";
             query += ";";
 
-            using(SqlConnection conn = new SqlConnection("Data Source=" + connStr))
+            using(SqlConnection conn = new SqlConnection(ConnStr))
             using(SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();

@@ -1,26 +1,33 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.SqlClient;
 
 namespace Chums_Zann.Server.Models
 {
     public class Categories
     {
-        public static List<PrimaryCategory> GetPrimaries()
+        private readonly IConfiguration Configuration;
+        private readonly string ConnStr;
+        public Categories(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            ConnStr = Configuration["ConnectionStrings:DefaultConnection"] ?? "";
+        }
+
+        public List<PrimaryCategory> GetPrimaries()
         {
             List<PrimaryCategory> primCategories = [];
 
-            string connStr = "./chums.db";
             string query =
                 @"SELECT [id],[description]" +
-                 " FROM [PrimaryCategory];";
+                 " FROM [Inventory].[dbo].[PrimaryCategory];";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
-                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -42,18 +49,17 @@ namespace Chums_Zann.Server.Models
             return primCategories;
         }
 
-        public static bool CreatePrimary(string description)
+        public bool CreatePrimary(string description)
         {
-            string connStr = "./chums.db";
             string query =
                 @"SELECT COUNT([id])" +
-                 " FROM [PrimaryCategory]" +
+                 " FROM [Inventory].[dbo].[PrimaryCategory]" +
                  " WHERE [description] = @desc;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -67,12 +73,12 @@ namespace Chums_Zann.Server.Models
                 return false;
             }
 
-            query = "INSERT INTO [PrimaryCategory] ([description]) VALUES (@desc);";
+            query = "INSERT INTO [Inventory].[dbo].[PrimaryCategory] ([description]) VALUES (@desc);";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -88,16 +94,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool EditPrimary(long id, string description)
+        public bool EditPrimary(long id, string description)
         {
-            string connStr = "./chums.db";
             string query =
-                @"UPDATE [PrimaryCategory] SET [description] = @desc WHERE [id] = @id;";
+                @"UPDATE [Inventory].[dbo].[PrimaryCategory] SET [description] = @desc WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -113,16 +118,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool DeletePrimary(long id)
+        public bool DeletePrimary(long id)
         {
-            string connStr = "./chums.db";
             string query =
-                @"DELETE FROM [PrimaryCategory] WHERE [id] = @id;";
+                @"DELETE FROM [Inventory].[dbo].[PrimaryCategory] WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -137,24 +141,23 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static List<SubCategory> GetSubs()
+        public List<SubCategory> GetSubs()
         {
             List<SubCategory> subCategories = [];
 
-            string connStr = "./chums.db";
             string query =
                 @"SELECT sc.[id],pc.[id],pc.[description],sc.[description]" +
-                 " FROM [SubCategory] AS sc" +
-                 " INNER JOIN [PrimaryCategory] AS pc ON pc.[id] = sc.[primarycategory];";
+                 " FROM [Inventory].[dbo].[SubCategory] AS sc" +
+                 " INNER JOIN [Inventory].[dbo].[PrimaryCategory] AS pc ON pc.[id] = sc.[primarycategory];";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
-                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -183,18 +186,17 @@ namespace Chums_Zann.Server.Models
 
 
 
-        public static bool CreateSub(long primId, string description)
+        public bool CreateSub(long primId, string description)
         {
-            string connStr = "./chums.db";
             string query =
                 @"SELECT COUNT([id])" +
-                 " FROM [SubCategory]" +
+                 " FROM [Inventory].[dbo].[SubCategory]" +
                  " WHERE [PrimaryCategory] = @primId AND [description] = @desc;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -209,12 +211,12 @@ namespace Chums_Zann.Server.Models
                 return false;
             }
 
-            query = "INSERT INTO [SubCategory] ([PrimaryCategory],[description]) VALUES (@primId,@desc);";
+            query = "INSERT INTO [Inventory].[dbo].[SubCategory] ([PrimaryCategory],[description]) VALUES (@primId,@desc);";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -231,16 +233,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool EditSub(long id, long primId, string description)
+        public bool EditSub(long id, long primId, string description)
         {
-            string connStr = "./chums.db";
             string query =
-                @"UPDATE [SubCategory] SET [PrimaryCategory] = @primId, [description] = @desc WHERE [id] = @id;";
+                @"UPDATE [Inventory].[dbo].[SubCategory] SET [PrimaryCategory] = @primId, [description] = @desc WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -257,16 +258,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool DeleteSub(long id)
+        public bool DeleteSub(long id)
         {
-            string connStr = "./chums.db";
             string query =
-                @"DELETE FROM [SubCategory] WHERE [id] = @id;";
+                @"DELETE FROM [Inventory].[dbo].[SubCategory] WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
