@@ -17,7 +17,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class HomeComponent implements AfterViewInit {
   service = inject(InventoryService);
-  /*inventory = signal<Array<Merchandise>>([]);*/
   inventory: Merchandise[] = [];
 
   cols: number = 7;

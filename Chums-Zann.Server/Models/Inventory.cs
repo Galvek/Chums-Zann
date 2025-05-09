@@ -42,43 +42,51 @@ namespace Chums_Zann.Server.Models
             }
             query += " ORDER BY m.[name];";
 
-            using(SqlConnection conn = new SqlConnection(ConnStr))
-            using(SqlCommand cmd = conn.CreateCommand())
+            try
             {
-                conn.Open();
-                cmd.CommandText = query;
-                if (primaryCategory > 0) cmd.Parameters.AddWithValue("@primCat", primaryCategory);
-                if (subCategory > 0) cmd.Parameters.AddWithValue("subCat", subCategory);
-                using(SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    while(reader.Read())
+                    conn.Open();
+                    cmd.CommandText = query;
+                    if (primaryCategory > 0) cmd.Parameters.AddWithValue("@primCat", primaryCategory);
+                    if (subCategory > 0) cmd.Parameters.AddWithValue("subCat", subCategory);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        Merchandise merch = new Merchandise()
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt64(0),
-                            Name = reader.GetString(1),
-                            Description = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                            Price = reader.GetDecimal(3),
-                            Image = reader.IsDBNull(4) ? "" : Convert.ToBase64String(reader.GetValue(4) as byte[] ?? []),
-                            PrimCategory = reader.IsDBNull(6) ? new() : new()
+                            Merchandise merch = new Merchandise()
                             {
-                                Id = reader.GetInt64(5),
-                                Description = reader.GetString(6)
-                            },
-                            SubCategory = reader.IsDBNull(8) ? new() : new()
-                            {
-                                Id = reader.GetInt64(7),
-                                Description = reader.GetString(8)
-                            },
-                            OnSale = reader.GetBoolean(9),
-                            OutOfStock = reader.GetBoolean(10),
-                            SalePrice = reader.GetDecimal(11),
-                            SaleDescription = reader.IsDBNull(12) ? "" : reader.GetString(12)
-                        };
-                        inventory.Add(merch);
+                                Id = reader.GetInt64(0),
+                                Name = reader.GetString(1),
+                                Description = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                                Price = reader.GetDecimal(3),
+                                Image = reader.IsDBNull(4) ? "" : Convert.ToBase64String(reader.GetValue(4) as byte[] ?? []),
+                                PrimCategory = reader.IsDBNull(6) ? new() : new()
+                                {
+                                    Id = reader.GetInt64(5),
+                                    Description = reader.GetString(6)
+                                },
+                                SubCategory = reader.IsDBNull(8) ? new() : new()
+                                {
+                                    Id = reader.GetInt64(7),
+                                    Description = reader.GetString(8)
+                                },
+                                OnSale = reader.GetBoolean(9),
+                                OutOfStock = reader.GetBoolean(10),
+                                SalePrice = reader.GetDecimal(11),
+                                SaleDescription = reader.IsDBNull(12) ? "" : reader.GetString(12)
+                            };
+                            inventory.Add(merch);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+
+            }
+
             return inventory;
         }
 
