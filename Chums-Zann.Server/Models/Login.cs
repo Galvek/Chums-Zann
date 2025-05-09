@@ -102,7 +102,7 @@ namespace Chums_Zann.Server.Models
                     {
                         if (reader.Read())
                         {
-                            if (!reader.IsDBNull(0)) dbToken = reader.GetString(0);
+                            if (!reader.IsDBNull(0)) dbToken = reader.GetGuid(0).ToString();
                             if (!reader.IsDBNull(1))
                             {
                                 DateTime lastCheckTime = reader.GetDateTime(1);
