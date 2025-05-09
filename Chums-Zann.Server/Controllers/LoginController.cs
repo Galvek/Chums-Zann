@@ -6,10 +6,15 @@ namespace Chums_Zann.Server.Controllers
     [Route("[controller]")]
     public class LoginController : Controller
     {
+        private readonly IConfiguration _config;
+        public LoginController(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+
         [Route("[action]")]
         public JsonResult Validate(string username, string password)
         {
-
 #if DEBUG
             return Json(new
             {
@@ -18,7 +23,7 @@ namespace Chums_Zann.Server.Controllers
                 validated = true
             });
 #else
-            string result = Login.ValidateLogin(username, password);
+            string result = new Login(_config).ValidateLogin(username, password);
 
             return Json(new
             {
@@ -35,7 +40,7 @@ namespace Chums_Zann.Server.Controllers
 #if DEBUG
             return true;
 #else
-            return Login.ValidateToken(username, token);
+            return new Login(_config).ValidateToken(username, token);
 #endif
         }
     }

@@ -95,7 +95,7 @@ namespace Chums_Zann.Server.Models
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@name", merch.Name);
-                    if ((long)cmd.ExecuteScalar() > 0)
+                    if ((int)cmd.ExecuteScalar() > 0)
                         return false;
                 }
             }

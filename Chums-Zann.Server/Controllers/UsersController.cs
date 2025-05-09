@@ -6,36 +6,43 @@ namespace Chums_Zann.Server.Controllers
     [Route("[controller]")]
     public class UsersController : Controller
     {
+        private readonly IConfiguration _config;
+        public UsersController(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+
         [Route("[action]")]
         public JsonResult All()
         {
-            return Json(Users.GetUsers());
+            return Json(new Users(_config).GetUsers());
         }
 
         [Route("[action]")]
         public JsonResult UserById(int id)
         {
-            List<User> users = Users.GetUsers(id);
+            List<User> users = new Users(_config).GetUsers(id);
             return Json(users);
         }
 
         [Route("[action]")]
         public bool Create(string username, string password)
         {
-            return Users.CreateNewUser(username, password);
+            return new Users(_config).CreateNewUser(username, password);
         }
 
         [Route("[action]")]
         public bool Edit(long id, string password)
         {
-            return Users.EditUser(id, password);
+            return new Users(_config).EditUser(id, password);
         }
 
         [Route("[action]")]
         public JsonResult Delete(long id)
         {
-            Users.DeleteUser(id);
-            return Json(Users.GetUsers());
+            Users users = new Users(_config);
+            users.DeleteUser(id);
+            return Json(users.GetUsers());
         }
     }
 }

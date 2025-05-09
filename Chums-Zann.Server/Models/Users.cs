@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -6,25 +7,33 @@ namespace Chums_Zann.Server.Models
 {
     public class Users
     {
-        public static List<User> GetUsers(long id = -1)
+        private readonly IConfiguration Configuration;
+        private readonly string ConnStr;
+        public Users(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            ConnStr = Configuration["ConnectionStrings:DefaultConnection"] ?? "";
+        }
+
+        public List<User> GetUsers(long id = -1)
         {
             List<User> users = [];
 
             string connStr = "./chums.db";
             string query = 
                 "SELECT [id], [username]" +
-                " FROM [Users]";
+                " FROM [User].[dbo].[Logins]";
 
             if (id > 0) query += " WHERE [id] = @id";
             query += ";";
 
-            using(SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-            using(SqliteCommand cmd = conn.CreateCommand())
+            using(SqlConnection conn = new SqlConnection("Data Source=" + connStr))
+            using(SqlCommand cmd = conn.CreateCommand())
             {
                 conn.Open();
                 cmd.CommandText = query;
                 if (id > 0) cmd.Parameters.AddWithValue("@id", id);
-                using(SqliteDataReader reader = cmd.ExecuteReader())
+                using(SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while(reader.Read())
                     {
@@ -42,7 +51,7 @@ namespace Chums_Zann.Server.Models
         }
 
 
-        public static bool CreateNewUser(string username, string password)
+        public bool CreateNewUser(string username, string password)
         {
             if (!ValidateUser(username))
                 return false;
@@ -54,22 +63,21 @@ namespace Chums_Zann.Server.Models
             byte[] passHash = Helpers.GetPasswordHash(salt, password);
 
             //store passHash and saltedPass in database along with username
-            string connStr = "./chums.db";
             string query = "SELECT COUNT([username])" +
-                           " FROM [Users]" +
+                           " FROM [User].[dbo].[Logins]" +
                            " WHERE [username] = @user;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@user", username.ToLower());
-                    cmd.Parameters.Add("@hash", SqliteType.Blob).Value = passHash;
-                    cmd.Parameters.Add("@salt", SqliteType.Blob).Value = salt;
-                    if ((long)cmd.ExecuteScalar() > 0)
+                    cmd.Parameters.Add("@hash", SqlDbType.VarBinary).Value = passHash;
+                    cmd.Parameters.Add("@salt", SqlDbType.VarBinary).Value = salt;
+                    if ((int)cmd.ExecuteScalar() > 0)
                         return false; //TODO maybe return user already exists message as this will only be handled by logged in admins
                 }
             }
@@ -79,18 +87,18 @@ namespace Chums_Zann.Server.Models
                 return false;
             }
 
-            query = "INSERT INTO [Users] ([username],[pwHash],[salt]) VALUES (@user, @hash, @salt);";
+            query = "INSERT INTO [User].[dbo].[Logins] ([username],[pwHash],[salt]) VALUES (@user, @hash, @salt);";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@user", username.ToLower());
-                    cmd.Parameters.Add("@hash", SqliteType.Blob).Value = passHash;
-                    cmd.Parameters.Add("@salt", SqliteType.Blob).Value = salt;
+                    cmd.Parameters.Add("@hash", SqlDbType.VarBinary).Value = passHash;
+                    cmd.Parameters.Add("@salt", SqlDbType.VarBinary).Value = salt;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -103,7 +111,7 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool EditUser(long id, string password)
+        public bool EditUser(long id, string password)
         {
             if (!ValidatePass(password))
                 return false;
@@ -113,18 +121,18 @@ namespace Chums_Zann.Server.Models
             string connStr = "./chums.db";
             string query = 
                 "SELECT [salt]" +
-                " FROM [Users]" +
+                " FROM [User].[dbo].[Logins]" +
                 " WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection("Data Source=" + connStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@id", id);
-                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read() && !reader.IsDBNull(0))
                             //reuse same salt
@@ -143,16 +151,16 @@ namespace Chums_Zann.Server.Models
 
             if (passHash.Length == 0) return false;
 
-            query = "UPDATE [Users] SET [pwHash] = @hash WHERE [id] = @id;";
+            query = "UPDATE [User].[dbo].[Logins] SET [pwHash] = @hash WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection("Data Source=" + connStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
-                    cmd.Parameters.Add("@hash", SqliteType.Blob).Value = passHash;
+                    cmd.Parameters.Add("@hash", SqlDbType.VarBinary).Value = passHash;
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }
@@ -166,15 +174,15 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        public static bool DeleteUser(long id)
+        public bool DeleteUser(long id)
         {
             string connStr = "./chums.db";
-            string query = "DELETE FROM [Users] WHERE [id] = @id;";
+            string query = "DELETE FROM [User].[dbo].[Logins] WHERE [id] = @id;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection("Data Source=" + connStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
@@ -191,12 +199,12 @@ namespace Chums_Zann.Server.Models
             return true;
         }
 
-        static bool ValidateUser(string username)
+        bool ValidateUser(string username)
         {
             return username.Contains('@') && (username.Substring(username.LastIndexOf('@') + 1).Length > 0);
         }
 
-        static bool ValidatePass(string password)
+        bool ValidatePass(string password)
         {
             Regex reg = new("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$");
             return reg.IsMatch(password);

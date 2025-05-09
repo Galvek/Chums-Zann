@@ -58,7 +58,7 @@ namespace Chums_Zann.Server.Models
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@desc", description);
-                    if ((long)cmd.ExecuteScalar() > 0)
+                    if ((int)cmd.ExecuteScalar() > 0)
                         return false;
                 }
             }
@@ -200,7 +200,7 @@ namespace Chums_Zann.Server.Models
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@primId", primId);
                     cmd.Parameters.AddWithValue("@desc", description);
-                    if ((long)cmd.ExecuteScalar() > 0)
+                    if ((int)cmd.ExecuteScalar() > 0)
                         return false;
                 }
             }

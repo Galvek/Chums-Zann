@@ -1,28 +1,35 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.SqlClient;
 
 namespace Chums_Zann.Server.Models
 {
     public class Login
     {
-        public static string ValidateLogin(string username, string password)
+        private readonly IConfiguration Configuration;
+        private readonly string ConnStr;
+        public Login(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            ConnStr = Configuration["ConnectionStrings:DefaultConnection"] ?? "";
+        }
+
+        public string ValidateLogin(string username, string password)
         {
             byte[] salt = [];
             byte[] dbPwHash = [];
 
-            string connStr = "./chums.db";
             string query = "SELECT [pwHash], [salt]" +
-                " FROM [Users]" +
+                " FROM [User].[dbo].[Logins]" +
                 " WHERE [username] = @user;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@user", username.ToLower());
-                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -48,21 +55,20 @@ namespace Chums_Zann.Server.Models
             return GenerateLongliveToken(username);
         }
 
-        static string GenerateLongliveToken(string username)
+        string GenerateLongliveToken(string username)
         {
             string token = Guid.NewGuid().ToString();
-            string connStr = "./chums.db";
-            string query = "UPDATE [Users] SET [token] = @token, [lastCheckTime] = @checkTime WHERE [username] = @user;";
+            string query = "UPDATE [User].[dbo].[Logins] SET [token] = @token, [lastCheckTime] = @checkTime WHERE [username] = @user;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@token", token);
-                    cmd.Parameters.AddWithValue("@checkTime", DateTime.Now.Ticks);
+                    cmd.Parameters.AddWithValue("@checkTime", DateTime.Now);
                     cmd.Parameters.AddWithValue("@user", username.ToLower());
                     cmd.ExecuteNonQuery();
                 }
@@ -75,32 +81,31 @@ namespace Chums_Zann.Server.Models
             return token;
         }
 
-        public static bool ValidateToken(string username, string token)
+        public bool ValidateToken(string username, string token)
         {
             int timeOut = 30; //timeout in minutes
             string dbToken = string.Empty;
-            string connStr = "./chums.db";
             string query = "SELECT [token], [lastCheckTime]" +
-                " FROM [Users]" +
+                " FROM [User].[dbo].[Logins]" +
                 " WHERE [username] = @user;";
 
             try
             {
-                using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                using (SqliteCommand cmd = conn.CreateCommand())
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     conn.Open();
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@user", username.ToLower());
                     cmd.Parameters.AddWithValue("@token", token);
-                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             if (!reader.IsDBNull(0)) dbToken = reader.GetString(0);
                             if (!reader.IsDBNull(1))
                             {
-                                DateTime lastCheckTime = new DateTime(reader.GetInt64(1));
+                                DateTime lastCheckTime = reader.GetDateTime(1);
                                 if (DateTime.Now > lastCheckTime.AddMinutes(timeOut))
                                     return false;
 
@@ -116,12 +121,12 @@ namespace Chums_Zann.Server.Models
 
             if (token.Equals(dbToken))
             {
-                query = "UPDATE [Users] SET [lastCheckTime] = @checkTime WHERE [username] = @user;";
+                query = "UPDATE [User].[dbo].[Logins] SET [lastCheckTime] = @checkTime WHERE [username] = @user;";
 
                 try
                 {
-                    using (SqliteConnection conn = new SqliteConnection("Data Source=" + connStr))
-                    using (SqliteCommand cmd = conn.CreateCommand())
+                    using (SqlConnection conn = new SqlConnection(ConnStr))
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         conn.Open();
                         cmd.CommandText = query;
