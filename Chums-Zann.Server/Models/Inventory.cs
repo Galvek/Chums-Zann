@@ -70,6 +70,11 @@ namespace Chums_Zann.Server.Models
                                 SubCategory = reader.IsDBNull(8) ? new() : new()
                                 {
                                     Id = reader.GetInt64(7),
+                                    PrimaryCategory = reader.IsDBNull(6) ? new() : new()
+                                    {
+                                      Id = reader.GetInt64(5), //adding primary category here is meh and annoying, FIX AT SOME POINT PLEASE
+                                      Description = reader.GetString(6)
+                                    },
                                     Description = reader.GetString(8)
                                 },
                                 OnSale = reader.GetBoolean(9),
@@ -130,7 +135,7 @@ namespace Chums_Zann.Server.Models
                     cmd.Parameters.AddWithValue("@name", merch.Name);
                     cmd.Parameters.AddWithValue("@desc", merch.Description);
                     cmd.Parameters.AddWithValue("@price", merch.Price);
-                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Encoding.UTF8.GetBytes(merch.Image);
+                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Convert.FromBase64String(merch.Image);
                     cmd.Parameters.AddWithValue("@primCat", merch.PrimCategory.Id);
                     cmd.Parameters.AddWithValue("@subCat", merch.SubCategory.Id);
                     cmd.Parameters.AddWithValue("@sale", merch.OnSale);
@@ -167,7 +172,7 @@ namespace Chums_Zann.Server.Models
                     cmd.Parameters.AddWithValue("@name", merch.Name);
                     cmd.Parameters.AddWithValue("@desc", merch.Description);
                     cmd.Parameters.AddWithValue("@price", merch.Price);
-                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Encoding.UTF8.GetBytes(merch.Image);
+                    cmd.Parameters.Add("@img", SqlDbType.VarBinary).Value = Convert.FromBase64String(merch.Image);
                     cmd.Parameters.AddWithValue("@primCat", merch.PrimCategory.Id);
                     cmd.Parameters.AddWithValue("@subCat", merch.SubCategory.Id);
                     cmd.Parameters.AddWithValue("@sale", merch.OnSale);
