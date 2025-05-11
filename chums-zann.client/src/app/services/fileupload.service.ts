@@ -8,7 +8,7 @@ export class FileUploadService {
   http = inject(HttpClient);
 
   uploadFile(file: File) {
-    const url = "/fileupload/save";
+    const url = "/api/fileupload/save";
 
     let formData = new FormData();
     formData.append("image", file);

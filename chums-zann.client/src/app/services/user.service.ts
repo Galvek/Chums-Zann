@@ -11,20 +11,20 @@ export class UserService {
 
   getUsers() {
     //get all users
-    const url = "/users/all";
+    const url = "/api/users/all";
     return this.http.get<Array<User>>(url);
   }
 
   getUser(id: number) {
     //get single user
-    const url = "/users/userById";
+    const url = "/api/users/userById";
     let params = new HttpParams()
       .set("id", id);
     return this.http.get<Array<User>>(url, { params });
   }
 
   createUser(username: string, password: string) {
-    const url = "/users/create";
+    const url = "/api/users/create";
     let params = new HttpParams()
       .set("username", username)
       .set("password", password);
@@ -32,7 +32,7 @@ export class UserService {
   }
 
   editUser(id: number, password: string) {
-    const url = "/users/edit";
+    const url = "/api/users/edit";
     let params = new HttpParams()
       .set("id", id)
       .set("password", password);
@@ -40,7 +40,7 @@ export class UserService {
   }
 
   deleteUser(id: number) {
-    const url = "/users/delete";
+    const url = "/api/users/delete";
     let params = new HttpParams()
       .set("id", id);
     return this.http.get<Array<User>>(url, { params });

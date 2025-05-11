@@ -9,7 +9,7 @@ export class InventoryService {
   http = inject(HttpClient);
 
   getInventory(primCategory: number, subCategory: number) {
-    const url = "/inventory?primCategory=" + primCategory + "&subCategory=" + subCategory;
+    const url = "/api/inventory/get?primCategory=" + primCategory + "&subCategory=" + subCategory;
     return this.http.get<Array<Merchandise>>(url);
   }
 
@@ -18,17 +18,17 @@ export class InventoryService {
   }
 
   addItem(merch: Merchandise) {
-    const url = "/inventory/additem";
+    const url = "/api/inventory/additem";
     return this.http.post<Merchandise>(url, merch);
   }
 
   editItem(merch: Merchandise) {
-    const url = "/inventory/edititem";
+    const url = "/api/inventory/edititem";
     return this.http.post<Merchandise>(url, merch);
   }
 
   deleteItem(id: number) {
-    const url = "/inventory/deleteitem";
+    const url = "/api/inventory/deleteitem";
     return this.http.post<Array<Merchandise>>(url, id);
   }
 }

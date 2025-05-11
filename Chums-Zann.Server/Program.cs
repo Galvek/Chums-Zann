@@ -26,6 +26,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapFallbackToFile("browser/index.html");
-
 app.Run();

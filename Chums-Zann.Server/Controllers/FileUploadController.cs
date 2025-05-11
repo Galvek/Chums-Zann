@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Chums_Zann.Server.Controllers
 {
-    [Route("[controller]")]
+    [ApiController]
     public class FileUploadController : Controller
     {
-        [Route("[action]")]
+        [Route("api/[controller]/[action]")]
         public async Task<JsonResult> Save()
         {
             using var memoryStream = new MemoryStream();

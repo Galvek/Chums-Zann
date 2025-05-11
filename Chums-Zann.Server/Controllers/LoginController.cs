@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chums_Zann.Server.Controllers
 {
-    [Route("[controller]")]
+    [ApiController]
     public class LoginController : Controller
     {
         private readonly IConfiguration _config;
@@ -12,7 +12,7 @@ namespace Chums_Zann.Server.Controllers
             _config = configuration;
         }
 
-        [Route("[action]")]
+        [Route("api/[controller]/[action]")]
         public JsonResult Validate(string username, string password)
         {
 #if DEBUG
@@ -34,7 +34,7 @@ namespace Chums_Zann.Server.Controllers
 #endif
         }
 
-        [Route("[action]")]
+        [Route("api/[controller]/[action]")]
         public bool ValidateToken(string username, string token)
         {
 #if DEBUG

@@ -8,7 +8,7 @@ export class LoginService {
   http = inject(HttpClient);
 
   validateLogin(username: string, password: string) {
-    const url = "/login/validate";
+    const url = "/api/login/validate";
     let params = new HttpParams()
       .set("username", username)
       .set("password", password);
@@ -16,7 +16,7 @@ export class LoginService {
   }
 
   validateToken(username: string, token: string) {
-    const url = "/login/validatetoken";
+    const url = "/api/login/validatetoken";
     let params = new HttpParams()
       .set("username", username)
       .set("token", token);
