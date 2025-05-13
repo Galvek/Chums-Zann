@@ -28,7 +28,7 @@
 </div>-->
 
 <mat-toolbar class="footerNavBar">
-  <span>© Copyright {{ year }} Chum's Spirits Ltd., 94 chapel Street, Harrisville, RI 02830</span>
+  <span>© Copyright {{ year }} Chum's Spirits Ltd.</span><span [style.display]="showAddress ? 'block' : 'none'">, 94 chapel Street, Harrisville, RI 02830</span>
   <span style="flex: 1 1 auto;"></span>
   <button mat-button (click)="onClick(0, 0);">All</button>
   @for (cat of primCats; track cat) {

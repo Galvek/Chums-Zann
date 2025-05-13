@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
 import { PrimaryCategory } from '../../model/primaryCategory.type';
 import { catchError } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-footer',
@@ -21,6 +22,30 @@ export class FooterComponent {
 
   catService = inject(CategoryService);
   primCats: PrimaryCategory[] = [];
+
+  showAddress: boolean = true;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
+      .subscribe(result => {
+        if (result.matches) {
+          if (result.breakpoints[Breakpoints.Handset]) {
+            this.showAddress = false;
+          } else if (result.breakpoints[Breakpoints.XSmall]) {
+            this.showAddress = false;
+          } else if (result.breakpoints[Breakpoints.Small]) {
+            this.showAddress = false;
+          } else if (result.breakpoints[Breakpoints.Medium]) {
+            this.showAddress = true;
+          } else if (result.breakpoints[Breakpoints.Large]) {
+            this.showAddress = true;
+          } else {
+            this.showAddress = true;
+          }
+        }
+      });
+  }
 
   ngAfterViewInit() {
     this.catService.getPrimaries()
