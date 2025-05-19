@@ -15,6 +15,11 @@
   width: 100%;
 }
 
+.banner-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 .merch-container {
   display: flex;
   flex-wrap: nowrap;
@@ -25,6 +30,7 @@
   min-width: 249px;
   float: left;
   box-shadow: grey 0px 0px 4px 0px;
+  min-height: 620px;
 }
 
 .merchList {
@@ -32,6 +38,7 @@
   float: left;
   padding: 0 0 30px;
   box-shadow: grey 0px 0px 4px 0px;
+  min-height: 620px;
 }
 
 mat-slider {
