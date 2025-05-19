@@ -1,4 +1,4 @@
-<mat-card class="card-container" style="background-color: #101414;">
+<!--<mat-card class="card-container" style="background-color: #101414;">
   <mat-card-header>
     <mat-card-title-group>
       <mat-card-title>
@@ -32,4 +32,30 @@
       }
     </mat-chip-set>
   </mat-card-footer>
-</mat-card>
+</mat-card>-->
+
+<div class="card-container">
+  <div class="card-image">
+    <img height="150" width="150" src="data:image/png;base64, {{ item.image }}" />
+  </div>
+  <div class="card-header">
+    <div class="card-title">
+      <strong>{{ item.name }}</strong>
+    </div>
+    <div class="card-subtitle">
+      @if (item.onSale) {
+      <font color="#ff0000"><strong>{{ item.saleDescription }}</strong></font>
+      }
+    </div>
+  </div>
+  <div class="card-description">
+    {{ item.description }}
+  </div>
+  <div class="card-pricing">
+    @if (item.onSale) {
+    <span><s>${{ item.price }}</s> $ {{ item.salePrice }}</span>
+    } @else {
+    <span>${{ item.price }}</span>
+    }
+  </div>
+</div>

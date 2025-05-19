@@ -16,13 +16,13 @@ export class MerchandiseTileComponent {
   @Output() updateInventory = new EventEmitter<any>();
 
 
-  primCategoryClick(id: number) {
-    let categories = [id, 0];
-    this.updateInventory.emit(categories);
-  }
+  //primCategoryClick(id: number) {
+  //  let categories = [id, 0];
+  //  this.updateInventory.emit(categories);
+  //}
 
-  subCategoryClick(id: number) {
-    //let categories = [0, id];
-    //this.updateInventory.emit(categories);
-  }
+  //subCategoryClick(id: number) {
+  //  //let categories = [0, id];
+  //  //this.updateInventory.emit(categories);
+  //}
 }

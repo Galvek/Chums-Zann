@@ -39,5 +39,13 @@ namespace Chums_Zann.Server.Controllers
             inventory.DeleteItem(id);
             return Json(inventory.GetInventory());
         }
+
+        [Route("api/[controller]/[action]")]
+        public JsonResult GetMinMaxPrice()
+        {
+            Tuple<decimal, decimal> minMaxPrice = new Inventory(_config).GetMinMaxPrice();
+            var prices = new { minPrice = minMaxPrice.Item1, maxPrice = minMaxPrice.Item2 };
+            return Json(prices);
+        }
     }
 }

@@ -22,7 +22,6 @@ import { catchError } from 'rxjs';
 import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 import { PrimaryCategory } from '../../model/primaryCategory.type';
 import { SubCategory } from '../../model/subCategory.type';
-import { NgFor } from '@angular/common';
 import { MerchandiseTileComponent } from '../../component/merchandise-tile/merchandise-tile.component';
 
 
@@ -41,7 +40,6 @@ import { MerchandiseTileComponent } from '../../component/merchandise-tile/merch
     MatDialogActions,
     MatDialogClose,
     MatSelectModule,
-    NgFor,
     MerchandiseTileComponent],
   templateUrl: './add-merch-modal.component.html',
   styleUrl: './add-merch-modal.component.scss'

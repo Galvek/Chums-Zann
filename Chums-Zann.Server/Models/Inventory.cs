@@ -214,5 +214,43 @@ namespace Chums_Zann.Server.Models
 
             return true;
         }
+
+        public Tuple<decimal, decimal> GetMinMaxPrice()
+        {
+            decimal minPrice = 0;
+            decimal maxPrice = 0;
+
+            string query =
+                "SELECT MIN(CASE WHEN [price] > [salePrice] THEN [salePrice] ELSE [price] END) as minPrice," +
+                "   MAX(CASE WHEN [price] < [salePrice] THEN [salePrice] ELSE [price] END) as maxPrice" +
+                " FROM [Inventory].[dbo].[Merchandise];";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = query;
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            minPrice = reader.IsDBNull(0) ? 0 : reader.GetDecimal(0);
+                            maxPrice = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
+
+                            minPrice = Math.Floor(minPrice / 10) * 10;
+                            maxPrice = Math.Ceiling(maxPrice / 10) * 10;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return new Tuple<decimal, decimal>(0, 0);
+            }
+
+            return new Tuple<decimal, decimal>(minPrice, maxPrice);
+        }
     }
 }

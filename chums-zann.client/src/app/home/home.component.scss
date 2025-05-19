@@ -1,11 +1,33 @@
 .header {
-
+    position:fixed;
+    width: 100%;
+    z-index: 1;
 }
 
 .content {
-    min-height: (100vh - 37.1);
+  padding: 94px 0 30px;
 }
 
 .footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
 
+.filterPanel {
+  width: 13%;
+  float: left;
+  box-shadow: grey 0px 0px 4px 0px;
+}
+
+.merchList {
+  width: 87%;
+  float: left;
+  padding: 0 0 30px;
+  box-shadow: grey 0px 0px 4px 0px;
+}
+
+mat-slider {
+    width: 200px;
 }

@@ -31,4 +31,9 @@ export class InventoryService {
     const url = "/api/inventory/deleteitem";
     return this.http.post<Array<Merchandise>>(url, id);
   }
+
+  getMinMaxPrice() {
+    const url = "/api/inventory/getminmaxprice";
+    return this.http.get(url);
+  }
 }
