@@ -5,42 +5,44 @@
   <!--consider creating a banner or something more fancy-->
   <img src="../assets/chums-storefront.jpg" style="width: 100%; height: 200px;" />
 
-  <div class="filterPanel">
-    <!-- list of filtering options -->
-    <mat-list role="list">
-      @for(primCat of primCats; track primCat) {
-      <mat-list-item role="listitem">
-        <mat-selection-list (selectionChange)="selectPrimaryFilter()" #prims>
-          <mat-list-option [value]="primCat"><font color="black">{{ primCat.description }} ({{ getProductCount(primCat.id, 0) }})</font></mat-list-option>
-        </mat-selection-list>
-      </mat-list-item>
-      @for(subCat of getSubCategoriesByPrimary(primCat.id); track subCat) {
-      <mat-list-item role="listitem">
-        <mat-selection-list (selectionChange)="selectSubFilter()" #subs>
-          <mat-list-option [value]="subCat"><font color="darkgrey" style="margin-left: 20px;">{{ subCat.description }} ({{ getProductCount(primCat.id, subCat.id) }})</font></mat-list-option>
-        </mat-selection-list>
-      </mat-list-item>
-      }
-      }
-      <mat-list-item>
-        <font color="black">Price: (${{ minSliderValue }} - ${{ maxSliderValue }})</font>
-      </mat-list-item>
-      <mat-list-item>
-        <mat-slider min="{{ minPrice }}" max="{{ maxPrice }}" step=".01">
-          <input [value]="minSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMinSliderValue($event)" matSliderStartThumb />
-          <input [value]="maxSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMaxSliderValue($event)" matSliderEndThumb />
-        </mat-slider>
-      </mat-list-item>
-      <mat-list-item role="listitem">
-        <button mat-raised-button (click)="resetFilter();">Reset Filter</button>
-      </mat-list-item>
-    </mat-list>
-  </div>
+  <div class="merch-container">
+    <div class="filterPanel">
+      <!-- list of filtering options -->
+      <mat-list role="list">
+        @for(primCat of primCats; track primCat) {
+        <mat-list-item role="listitem">
+          <mat-selection-list (selectionChange)="selectPrimaryFilter()" #prims>
+            <mat-list-option [value]="primCat"><font color="black">{{ primCat.description }} ({{ getProductCount(primCat.id, 0) }})</font></mat-list-option>
+          </mat-selection-list>
+        </mat-list-item>
+        @for(subCat of getSubCategoriesByPrimary(primCat.id); track subCat) {
+        <mat-list-item role="listitem">
+          <mat-selection-list (selectionChange)="selectSubFilter()" #subs>
+            <mat-list-option [value]="subCat"><font color="darkgrey" style="margin-left: 20px;">{{ subCat.description }} ({{ getProductCount(primCat.id, subCat.id) }})</font></mat-list-option>
+          </mat-selection-list>
+        </mat-list-item>
+        }
+        }
+        <mat-list-item>
+          <font color="black">Price: (${{ minSliderValue }} - ${{ maxSliderValue }})</font>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-slider min="{{ minPrice }}" max="{{ maxPrice }}" step=".01">
+            <input [value]="minSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMinSliderValue($event)" matSliderStartThumb />
+            <input [value]="maxSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMaxSliderValue($event)" matSliderEndThumb />
+          </mat-slider>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-raised-button (click)="resetFilter();">Reset Filter</button>
+        </mat-list-item>
+      </mat-list>
+    </div>
 
-  <!-- item list -->
-  <div class="merchList">
-    <div *ngFor="let merch of inventory">
-      <app-merchandise-tile [item]="merch" (updateInventory)="changeLiqourCategory($event);"></app-merchandise-tile>
+    <!-- item list -->
+    <div class="merchList">
+      <div *ngFor="let merch of inventory">
+        <app-merchandise-tile [item]="merch" (updateInventory)="changeLiqourCategory($event);"></app-merchandise-tile>
+      </div>
     </div>
   </div>
 </div>

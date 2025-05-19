@@ -15,6 +15,12 @@
   width: 100%;
 }
 
+.merch-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
 .filterPanel {
   min-width: 249px;
   float: left;
@@ -22,7 +28,6 @@
 }
 
 .merchList {
-  min-width: 87%;
   width: 87%;
   float: left;
   padding: 0 0 30px;
