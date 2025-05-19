@@ -134,28 +134,12 @@ export class HomeComponent implements AfterViewInit {
     }
   }
 
-  resetFilter() {
-    this.inventory = this.origInv;
-    this.minSliderValue = this.minPrice;
-    this.maxSliderValue = this.maxPrice;
-  }
-
   selectPrimaryFilter() {
-    if (this.prims.selectedOptions.selected.length > 0) {
-      this.inventory = [];
-      this.prims.selectedOptions.selected.forEach((selectedItem) => {
-        let merch: Merchandise[] = this.origInv.filter((item) => item.primCategory.id === selectedItem.value.id);
-        merch.forEach((value) => {
-          this.inventory.push(value)
-        });
-
-        this.subs.options.filter((cat) => cat.value.primaryCategory.id === selectedItem.value.id).forEach((cat) => {
-          cat.selected = true;
-        })
-      });
-    } else {
-      this.inventory = this.origInv;
-    }
+    this.prims.selectedOptions.selected.forEach((selectedItem) => {
+      this.subs.options.filter((cat) => cat.value.primaryCategory.id === selectedItem.value.id).forEach((cat) => {
+        cat.selected = true;
+      })
+    });
 
     //de-select all sub categories foreach unselected primary categories
     this.prims.options.filter((cat) => !cat.selected).forEach((cat) => {
@@ -163,24 +147,19 @@ export class HomeComponent implements AfterViewInit {
         cat.selected = false;
       })
     });
+
+    this.applyFilter();
   }
 
   selectSubFilter() {
-    if (this.subs.selectedOptions.selected.length > 0) {
-      this.inventory = [];
-      this.subs.selectedOptions.selected.forEach((selectedItem) => {
-        let merch: Merchandise[] = this.origInv.filter((item) => item.subCategory.id === selectedItem.value.id);
-        merch.forEach((value) => {
-          this.inventory.push(value)
-        });
-        //select each primary category that has a match the the sub categories primary category
-        this.prims.options.filter((cat) => cat.value.id === selectedItem.value.id).forEach((cat) => {
-          cat.selected = true;
-        })
-      });
-    } else {
-      this.inventory = this.origInv;
-    }
+    this.subs.selectedOptions.selected.forEach((selectedItem) => {
+      //select each primary category that has a match the the sub categories primary category
+      this.prims.options.filter((cat) => cat.value.id === selectedItem.value.id).forEach((cat) => {
+        cat.selected = true;
+      })
+    });
+
+    this.applyFilter();
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -211,11 +190,8 @@ export class HomeComponent implements AfterViewInit {
     } else {
       this.maxSliderValue = event.value;
     }
-    this.inventory = this.origInv.filter((item) =>
-      item.onSale
-        ? item.salePrice >= this.minSliderValue && item.salePrice <= this.maxSliderValue
-        : item.price >= this.minSliderValue && item.price <= this.maxSliderValue
-    );
+
+    this.applyFilter();
   }
 
   setMinSliderValue(event: any) {
@@ -226,5 +202,54 @@ export class HomeComponent implements AfterViewInit {
   setMaxSliderValue(event: any) {
     let ele = event.target as HTMLInputElement;
     this.maxSliderValue = parseFloat(ele.value);
+  }
+
+  applyFilter() {
+    //apply primary category selection filter
+    if (this.prims.selectedOptions.selected.length > 0) {
+      this.inventory = [];
+      this.prims.selectedOptions.selected.forEach((selectedItem) => {
+        let merch: Merchandise[] = this.origInv.filter((item) => item.primCategory.id === selectedItem.value.id);
+        merch.forEach((value) => {
+          this.inventory.push(value)
+        });
+      });
+    } else {
+      this.inventory = this.origInv;
+    }
+
+    //apply sub category selection filter
+    if (this.subs.selectedOptions.selected.length > 0) {
+      this.inventory = [];
+      this.subs.selectedOptions.selected.forEach((selectedItem) => {
+        let merch: Merchandise[] = this.origInv.filter((item) => item.subCategory.id === selectedItem.value.id);
+        merch.forEach((value) => {
+          this.inventory.push(value)
+        });
+      });
+    } else {
+      this.inventory = this.origInv;
+    }
+
+    //apply pricing filter
+    this.inventory = this.origInv.filter((item) =>
+      item.onSale
+        ? item.salePrice >= this.minSliderValue && item.salePrice <= this.maxSliderValue
+        : item.price >= this.minSliderValue && item.price <= this.maxSliderValue
+    );
+  }
+
+  resetFilter() {
+    this.inventory = this.origInv;
+    this.minSliderValue = this.minPrice;
+    this.maxSliderValue = this.maxPrice;
+
+    this.prims.options.forEach((cat) => {
+      cat.selected = false;
+    });
+
+    this.subs.options.forEach((cat) => {
+      cat.selected = false;
+    });
   }
 }

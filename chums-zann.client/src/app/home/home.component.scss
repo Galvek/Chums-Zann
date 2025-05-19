@@ -1,7 +1,7 @@
 .header {
-    position:fixed;
-    width: 100%;
-    z-index: 1;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
 }
 
 .content {
@@ -16,12 +16,13 @@
 }
 
 .filterPanel {
-  width: 13%;
+  min-width: 249px;
   float: left;
   box-shadow: grey 0px 0px 4px 0px;
 }
 
 .merchList {
+  min-width: 87%;
   width: 87%;
   float: left;
   padding: 0 0 30px;
@@ -29,5 +30,5 @@
 }
 
 mat-slider {
-    width: 200px;
+  width: 200px;
 }
