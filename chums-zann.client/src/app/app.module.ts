@@ -19,6 +19,8 @@ import { AddUserModalComponent } from './component/add-user-modal/add-user-modal
 import { EditUserModalComponent } from './component/edit-user-modal/edit-user-modal.component';
 import { EditSubCategoryModalComponent } from './component/edit-sub-category-modal/edit-sub-category-modal.component';
 import { EditPrimaryCategoryModalComponent } from './component/edit-primary-category-modal/edit-primary-category-modal.component';
+import { BannerSliderComponent } from './component/banner-slider/banner-slider.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,7 +41,8 @@ import { EditPrimaryCategoryModalComponent } from './component/edit-primary-cate
     AddUserModalComponent, //may not even need to include some of these here, as they're standalone and included in the specific components as needed
     EditUserModalComponent,
     EditSubCategoryModalComponent,
-    EditPrimaryCategoryModalComponent],
-  providers: [provideHttpClient(withInterceptorsFromDi())]
+    EditPrimaryCategoryModalComponent,
+    BannerSliderComponent],
+  providers: [provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()]
 })
 export class AppModule { }

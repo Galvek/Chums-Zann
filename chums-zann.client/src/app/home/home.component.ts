@@ -15,7 +15,7 @@ import { CategoryService } from '../services/category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
-import { SelectionModel } from '@angular/cdk/collections';
+import { BannerSliderComponent } from '../component/banner-slider/banner-slider.component';
 
 type MinMaxPrice = {
   minPrice: number;
@@ -35,7 +35,8 @@ type MinMaxPrice = {
     MatListModule,
     MatSliderModule,
     MatButtonModule,
-    MatSelectionList]
+    MatSelectionList,
+    BannerSliderComponent]
 })
 export class HomeComponent implements AfterViewInit {
   service = inject(InventoryService);

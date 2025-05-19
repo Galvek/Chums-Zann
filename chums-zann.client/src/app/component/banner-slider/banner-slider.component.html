@@ -1,0 +1,8 @@
+<div [@bannerAnimation]="currIndex"
+      class="banner-container">
+  @for(slide of items; track slide) {
+  <div class="banner"><img src="{{ slide.image }}" style="width: 100%; height: 100%;" /></div>
+  }
+</div>
+
+  <!--<img src="{{ slides[currIndex].image }}" style="width: 100%; height: 100%;" />-->
