@@ -148,6 +148,10 @@ export class HomeComponent implements AfterViewInit {
         merch.forEach((value) => {
           this.inventory.push(value)
         });
+
+        this.subs.options.filter((cat) => cat.value.primaryCategory.id === selectedItem.value.id).forEach((cat) => {
+          cat.selected = true;
+        })
       });
     } else {
       this.inventory = this.origInv;
