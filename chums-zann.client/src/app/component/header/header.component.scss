@@ -1,8 +1,9 @@
+.header {
+    min-height: 64px;
+}
+
 .headerNavBar {
   box-shadow: grey 0px 0px 4px 0px;
   height: 30px;
-}
-
-button {
-    height: 25px;
+  min-height: 30px;
 }

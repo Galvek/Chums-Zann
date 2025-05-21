@@ -8,4 +8,5 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 :root {
   @include mat.toolbar-overrides(( container-background-color: #EF8A21 ));
   /*@include mat.card-overrides(( subtitle-text-color: #ff0000 ));*/
+  @include mat.slider-overrides(( handle-color: black, active-track-color: black, focus-handle-color: black ));
 }

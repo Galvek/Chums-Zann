@@ -5,8 +5,17 @@
   <!--consider creating a banner or something more fancy-->
   <app-banner-slider></app-banner-slider>
 
+  <!-- mobile filter panel START -->
+  <div class="mobileFilterPanel" [style.display]="showMobileFilter ? 'block' : 'none'">
+    <button mat-raised-button onclick="alert('WE DID IT!')">Filter</button>
+  </div>
+
+  <!-- mobile filter panel END -->
+
   <div class="merch-container">
-    <div class="filterPanel">
+
+    <!-- non-mobile filter panel START -->
+    <div class="filterPanel" [style.display]="!showMobileFilter ? 'block' : 'none'">
       <!-- list of filtering options -->
       <mat-list role="list">
         @for(primCat of primCats; track primCat) {
@@ -37,14 +46,15 @@
         </mat-list-item>
       </mat-list>
     </div>
-
-    <!-- item list -->
+    <!-- non-mobile filter panel END -->
+    <!-- item list START -->
     <div class="merchList">
       <div *ngFor="let merch of inventory">
         <app-merchandise-tile [item]="merch" (updateInventory)="changeLiqourCategory($event);"></app-merchandise-tile>
       </div>
     </div>
   </div>
+  <!-- item list END -->
 </div>
 
 <app-footer class="footer"></app-footer>

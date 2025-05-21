@@ -58,7 +58,22 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild('prims') prims!: MatSelectionList;
   @ViewChild('subs') subs!: MatSelectionList;
 
+  showMobileFilter: boolean = false;
+
   constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
+      .subscribe(result => {
+        if (result.matches) {
+          if (result.breakpoints[Breakpoints.Handset]
+            || result.breakpoints[Breakpoints.XSmall]
+            || result.breakpoints[Breakpoints.Small]) {
+            this.showMobileFilter = true;
+          } else {
+            this.showMobileFilter = false;
+          }
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -165,7 +180,7 @@ export class HomeComponent implements AfterViewInit {
 
   @HostListener('window:scroll', ['$event'])
   getScrollHeight(event: any) {
-    if (window.pageYOffset > 0 && !this.backToTopOpen) {
+    if (window.pageYOffset > 200 && !this.backToTopOpen) {
       this.openBackToTop("Back to the top.", "Click");
     } else if (window.pageYOffset == 0) {
       this.backToTopOpen = false;
