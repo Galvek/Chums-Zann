@@ -32,14 +32,6 @@ export class FooterComponent {
         if (result.matches) {
           if (result.breakpoints[Breakpoints.Handset]) {
             this.showAddress = false;
-          } else if (result.breakpoints[Breakpoints.XSmall]) {
-            this.showAddress = false;
-          } else if (result.breakpoints[Breakpoints.Small]) {
-            this.showAddress = false;
-          } else if (result.breakpoints[Breakpoints.Medium]) {
-            this.showAddress = true;
-          } else if (result.breakpoints[Breakpoints.Large]) {
-            this.showAddress = true;
           } else {
             this.showAddress = true;
           }

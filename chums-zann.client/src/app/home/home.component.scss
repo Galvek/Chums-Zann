@@ -24,6 +24,17 @@
   min-width: 485px;
 }
 
+.merchList {
+  width: 100%;
+  float: left;
+  padding: 0 0 30px;
+  box-shadow: grey 0px 0px 4px 0px;
+}
+
+mat-slider {
+  width: 200px;
+}
+
 .filterPanel {
   min-width: 249px;
   float: left;
@@ -47,13 +58,15 @@
     color: white;
 }
 
-.merchList {
-  width: 100%;
-  float: left;
-  padding: 0 0 30px;
-  box-shadow: grey 0px 0px 4px 0px;
-}
-
-mat-slider {
-  width: 200px;
+.mobileFilterContainer {
+  background-color: white;
+  border: solid 1px black;
+  min-width: 275px;
+  width: 275px;
+  z-index: 1;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }

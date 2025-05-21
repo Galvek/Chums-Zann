@@ -59,15 +59,14 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild('subs') subs!: MatSelectionList;
 
   showMobileFilter: boolean = false;
+  showMobileFilterContainer: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver) {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
       .subscribe(result => {
         if (result.matches) {
-          if (result.breakpoints[Breakpoints.Handset]
-            || result.breakpoints[Breakpoints.XSmall]
-            || result.breakpoints[Breakpoints.Small]) {
+          if (result.breakpoints[Breakpoints.Handset]) {
             this.showMobileFilter = true;
           } else {
             this.showMobileFilter = false;
@@ -110,7 +109,7 @@ export class HomeComponent implements AfterViewInit {
         this.maxPrice = minMaxPrice.maxPrice;
         this.minSliderValue = this.minPrice;
         this.maxSliderValue = this.maxPrice;
-      })
+      });
   }
 
   changeLiqourCategory(categories: any) {
@@ -267,5 +266,9 @@ export class HomeComponent implements AfterViewInit {
     this.subs.options.forEach((cat) => {
       cat.selected = false;
     });
+  }
+
+  toggleFilterContainer() {
+    this.showMobileFilterContainer = !this.showMobileFilterContainer;
   }
 }

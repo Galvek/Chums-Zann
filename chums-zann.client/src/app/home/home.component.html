@@ -7,13 +7,47 @@
 
   <!-- mobile filter panel START -->
   <div class="mobileFilterPanel" [style.display]="showMobileFilter ? 'block' : 'none'">
-    <button mat-raised-button onclick="alert('WE DID IT!')">Filter</button>
+    <button mat-raised-button (click)="toggleFilterContainer()">Filter</button>
+
+    <!-- TODO make this a component so we can re-use it -->
+    <div class="mobileFilterContainer" [style.display]="showMobileFilterContainer ? 'block' : 'none'">
+      <mat-list role="list">
+        @for(primCat of primCats; track primCat) {
+        <mat-list-item role="listitem">
+          <mat-selection-list (selectionChange)="selectPrimaryFilter()" #prims>
+            <mat-list-option [value]="primCat"><font color="black">{{ primCat.description }} ({{ getProductCount(primCat.id, 0) }})</font></mat-list-option>
+          </mat-selection-list>
+        </mat-list-item>
+        @for(subCat of getSubCategoriesByPrimary(primCat.id); track subCat) {
+        <mat-list-item role="listitem">
+          <mat-selection-list (selectionChange)="selectSubFilter()" #subs>
+            <mat-list-option [value]="subCat"><font color="darkgrey" style="margin-left: 20px;">{{ subCat.description }} ({{ getProductCount(primCat.id, subCat.id) }})</font></mat-list-option>
+          </mat-selection-list>
+        </mat-list-item>
+        }
+        }
+        <mat-list-item>
+          <font color="black">Price: (${{ minSliderValue }} - ${{ maxSliderValue }})</font>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-slider min="{{ minPrice }}" max="{{ maxPrice }}" step=".01">
+            <input [value]="minSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMinSliderValue($event)" matSliderStartThumb />
+            <input [value]="maxSliderValue" (dragEnd)="priceSliderValueChanged($event);" (input)="setMaxSliderValue($event)" matSliderEndThumb />
+          </mat-slider>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-raised-button (click)="toggleFilterContainer();">Close</button>
+          <button mat-raised-button (click)="resetFilter();">Reset Filter</button>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </div>
 
   <!-- mobile filter panel END -->
 
   <div class="merch-container">
 
+    <!-- TODO make this a component so we can re-use it -->
     <!-- non-mobile filter panel START -->
     <div class="filterPanel" [style.display]="!showMobileFilter ? 'block' : 'none'">
       <!-- list of filtering options -->
