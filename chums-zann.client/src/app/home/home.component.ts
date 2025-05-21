@@ -66,7 +66,12 @@ export class HomeComponent implements AfterViewInit {
       .observe([Breakpoints.Handset, Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
       .subscribe(result => {
         if (result.matches) {
-          if (result.breakpoints[Breakpoints.Handset]) {
+          if (result.breakpoints[Breakpoints.Handset]
+            || result.breakpoints[Breakpoints.HandsetLandscape]
+            || result.breakpoints[Breakpoints.HandsetPortrait]
+            || result.breakpoints[Breakpoints.Tablet]
+            || result.breakpoints[Breakpoints.TabletLandscape]
+            || result.breakpoints[Breakpoints.TabletPortrait]) {
             this.showMobileFilter = true;
           } else {
             this.showMobileFilter = false;
