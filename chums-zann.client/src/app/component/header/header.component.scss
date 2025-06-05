@@ -1,9 +1,37 @@
-.header {
-    min-height: 64px;
+.headerContainer {
+  min-height: 150px;
+  height: 150px;
+  background-color: black;
 }
 
-.headerNavBar {
-  box-shadow: grey 0px 0px 4px 0px;
-  height: 30px;
-  min-height: 30px;
+.header {
+    min-height: 25px;
+    height: 25px;
+    color: black;
+}
+
+.headerImg {
+    width: 50%;
+    height: 125px;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+.headerContainerSlim {
+  min-height: 125px;
+  height: 125px;
+  background-color: black;
+}
+
+.headerImgSlim {
+  width: 50%;
+  height: 125px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }

@@ -1,33 +1,30 @@
 .header {
   position: fixed;
   width: 100%;
-  z-index: 1;
+  z-index: 100;
 }
 
 .content {
-  padding: 94px 0 30px;
+  padding-top: 150px;
+  padding-bottom: 25px;
   min-width: 485px;
-}
-
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
 }
 
 .merch-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
-  width: 100%;
+  width: 70%;
   min-width: 485px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }
 
 .merchList {
   width: 100%;
   float: left;
-  padding: 0 0 30px;
   box-shadow: grey 0px 0px 4px 0px;
 }
 
@@ -41,21 +38,21 @@ mat-slider {
   box-shadow: grey 0px 0px 4px 0px;
 }
 
-.filterPanel button {
-    color: white;
-}
-
 .mobileFilterPanel {
   box-shadow: grey 0px 0px 4px 0px;
-  width: 100%;
+  width: 70%;
   height: 36px;
+  min-width: 485px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }
 
-.mobileFilterPanel button {
-    margin: 5px;
-    float: right;
-    height: 25px;
-    color: white;
+.mobileFilterPanelBtn {
+  margin: 5px;
+  float: right;
+  height: 25px;
 }
 
 .mobileFilterContainer {
@@ -69,4 +66,12 @@ mat-slider {
   margin-right: auto;
   left: 0;
   right: 0;
+}
+
+.mobileFilterPanelItems {
+  padding-left: 3px;
+}
+
+.mobileFilterPanelSearchInput {
+  height: 25px;
 }

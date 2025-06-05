@@ -7,7 +7,16 @@
 
   <!-- mobile filter panel START -->
   <div class="mobileFilterPanel" [style.display]="showMobileFilter ? 'block' : 'none'">
-    <button mat-raised-button (click)="toggleFilterContainer()">Filter</button>
+
+    <div class="mobileFilterPanelItems">
+
+      <button mat-raised-button style="color:white; background-color:black;" class="mobileFilterPanelBtn" (click)="toggleFilterContainer()">Filter</button>
+
+      <!--<input class="mobileFilterPanelSearchInput" type="search" placeholder="Search" #search>
+      <button style="color: black; background-color: white; border: solid 0px black;" onclick="alert('Sorry. This is not yet implemented.')">
+        <mat-icon>search</mat-icon>
+      </button>-->
+    </div>
 
     <!-- TODO make this a component so we can re-use it -->
     <div class="mobileFilterContainer" [style.display]="showMobileFilterContainer ? 'block' : 'none'">
@@ -36,8 +45,8 @@
           </mat-slider>
         </mat-list-item>
         <mat-list-item role="listitem">
-          <button mat-raised-button (click)="toggleFilterContainer();">Close</button>
-          <button mat-raised-button (click)="resetFilter();">Reset Filter</button>
+          <button mat-raised-button style="color:white; background-color:black;" (click)="toggleFilterContainer();">Close</button>
+          <button mat-raised-button style="color:white; background-color:black;" (click)="resetFilter();">Reset Filter</button>
         </mat-list-item>
       </mat-list>
     </div>
@@ -51,6 +60,13 @@
     <!-- non-mobile filter panel START -->
     <div class="filterPanel" [style.display]="!showMobileFilter ? 'block' : 'none'">
       <!-- list of filtering options -->
+      <div style="padding: 10px;">
+        <!--<input type="search" placeholder="Search" #search>
+        <button style="color: black; background-color: white; border: solid 0px black;" onclick="alert('Sorry. This is not yet implemented.')">
+          <mat-icon>search</mat-icon>
+        </button>-->
+      </div>
+
       <mat-list role="list">
         @for(primCat of primCats; track primCat) {
         <mat-list-item role="listitem">
@@ -76,7 +92,7 @@
           </mat-slider>
         </mat-list-item>
         <mat-list-item role="listitem">
-          <button mat-raised-button (click)="resetFilter();">Reset Filter</button>
+          <button mat-raised-button style="color:white; background-color:black;" (click)="resetFilter();">Reset Filter</button>
         </mat-list-item>
       </mat-list>
     </div>
@@ -91,4 +107,4 @@
   <!-- item list END -->
 </div>
 
-<app-footer class="footer"></app-footer>
+<app-footer></app-footer>

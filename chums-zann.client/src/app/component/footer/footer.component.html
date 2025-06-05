@@ -1,8 +1,30 @@
-<mat-toolbar class="footerNavBar">
-  <span>© Copyright {{ year }} Chum's Spirits Ltd.</span><span [style.display]="showAddress ? 'block' : 'none'">, 94 chapel Street, Harrisville, RI 02830</span>
-  <span style="flex: 1 1 auto;"></span>
-  <!--<button mat-button (click)="onClick(0, 0);">All</button>
-  @for (cat of primCats; track cat) {
-  <button mat-button (click)="onClick(cat.id, 0);">{{ cat.description }}</button>
-  }-->
-</mat-toolbar>
+<div class="footer">
+  <div class="detailContainer">
+
+    <div class="detailItem">
+      <div class="detailsTitle"><strong>Contact Us</strong></div>
+      <div class="detailContent">
+        <mat-icon style="font-size: 20px; padding-top: 7px;">phone</mat-icon>
+        (401) 568-2570
+        <br />
+        <mat-icon style="font-size: 20px; padding-top: 7px;">room</mat-icon>
+        94 chapel Street, Harrisville, RI 02830
+      </div>
+    </div>
+    <div class="detailItem">
+      <div class="detailsTitle"><strong>Hours</strong></div>
+      <div class="detailContent">
+        <mat-icon style="font-size: 20px; padding-top: 7px;">home</mat-icon>
+        Business Hours
+        <div style="padding-left: 30px;">
+          <strong>Mon - Sat</strong> 9:00AM - 10:00PM
+          <br />
+          <strong>Sun</strong> 10:00AM - 6:00PM
+          <br />
+          <strong>Holiday</strong> (Hours may vary)
+        </div>
+      </div>
+    </div>
+  </div>
+  <span>© Copyright {{ year }} Chum's Spirits Ltd.</span>
+</div>

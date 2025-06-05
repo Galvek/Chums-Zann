@@ -23,6 +23,8 @@ export class HeaderComponent {
   catService = inject(CategoryService);
   primCats: PrimaryCategory[] = [];
 
+  showSlimHeader: boolean = false;
+
   ngAfterViewInit() {
     this.catService.getPrimaries()
       .pipe(
@@ -38,5 +40,14 @@ export class HeaderComponent {
   onClick(primCategory: number, subCategory: number) {
     let categories = [primCategory, subCategory];
     this.updateInventory.emit(categories);
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  getScrollHeight(event: any) {
+    if (window.pageYOffset > 300) {
+      this.showSlimHeader = true;
+    } else if (window.pageYOffset <= 300) {
+      this.showSlimHeader = false;
+    }
   }
 }

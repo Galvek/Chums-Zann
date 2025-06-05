@@ -1,8 +1,12 @@
-<div>
-  <mat-toolbar class="header"style="background-color: #101414; ">
+@if (!showSlimHeader) {
+<div class="headerContainer">
+  <mat-toolbar class="header">
     <span style="flex: 2 1 auto;"></span>
-    <span>Chum's Spirits Ltd.</span>
     <span style="flex: 8 1 auto;"></span>
+    <span style="padding-top: 8px;">
+      <mat-icon style="font-size: 20px;">room</mat-icon>
+    </span>
+    <mat-label style="font-size: 14px;">94 chapel Street, Harrisville, RI 02830</mat-label>
     <span style="padding-top: 8px;">
       <mat-icon style="font-size: 20px;">phone</mat-icon>
     </span>
@@ -11,15 +15,15 @@
     <span><!--<a href="#" routerLink="/login">Log in</a>--></span>
   </mat-toolbar>
 
-  <mat-toolbar class="headerNavBar">
-    <span style="flex: 1 1 auto;"></span>
-
-    <!--<button mat-button (click)="onClick(0, 0);">All</button>
-    @for (cat of primCats; track cat) {
-    <button mat-button (click)="onClick(cat.id, 0);">{{ cat.description }}</button>
-    }-->
-
-    <span style="flex: 1 1 auto;"></span>
-  </mat-toolbar>
+  <img class="headerImg" src="../assets/chums-logo.jpg" />
 
 </div>
+} @else {
+<div>
+  <div class="headerContainerSlim">
+
+    <img class="headerImgSlim" src="../assets/chums-logo.jpg" />
+
+  </div>
+</div>
+}

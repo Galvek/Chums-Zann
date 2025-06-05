@@ -1,4 +1,25 @@
-.footerNavBar {
+.footer {
   box-shadow: grey 0px 0px 4px 0px;
-  height: 30px;
+  color: black;
+  background-color: #EF8A21;
+}
+
+.detailContainer {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  padding: 25px 0px 30px 0px;
+  justify-content: center;
+}
+
+.detailItem {
+  width: 500px;
+  margin-bottom: 10px;
+  line-height: 25px;
+}
+
+.detailTitle {
+}
+
+.detailContent {
 }
