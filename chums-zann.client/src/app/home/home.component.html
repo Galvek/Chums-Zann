@@ -6,7 +6,7 @@
   <app-banner-slider></app-banner-slider>
 
   <!-- mobile filter panel START -->
-  <div class="mobileFilterPanel" [style.display]="showMobileFilter ? 'block' : 'none'">
+  <div class="mobileFilterPanel" [style.display]="isMobileView ? 'block' : 'none'">
 
     <div class="mobileFilterPanelItems">
 
@@ -54,11 +54,11 @@
 
   <!-- mobile filter panel END -->
 
-  <div class="merch-container">
+  <div [class.merch-container]="!isMobileView" [class.mobile-merch-container]="isMobileView">
 
     <!-- TODO make this a component so we can re-use it -->
     <!-- non-mobile filter panel START -->
-    <div class="filterPanel" [style.display]="!showMobileFilter ? 'block' : 'none'">
+    <div class="filterPanel" [style.display]="!isMobileView ? 'block' : 'none'">
       <!-- list of filtering options -->
       <div style="padding: 10px;">
         <!--<input type="search" placeholder="Search" #search>

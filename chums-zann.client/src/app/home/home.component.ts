@@ -62,7 +62,7 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild('prims') prims!: MatSelectionList;
   @ViewChild('subs') subs!: MatSelectionList;
 
-  showMobileFilter: boolean = false;
+  isMobileView: boolean = false;
   showMobileFilterContainer: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver) {
@@ -76,9 +76,9 @@ export class HomeComponent implements AfterViewInit {
             || result.breakpoints[Breakpoints.Tablet]
             || result.breakpoints[Breakpoints.TabletLandscape]
             || result.breakpoints[Breakpoints.TabletPortrait]) {
-            this.showMobileFilter = true;
+            this.isMobileView = true;
           } else {
-            this.showMobileFilter = false;
+            this.isMobileView = false;
           }
         }
       });
