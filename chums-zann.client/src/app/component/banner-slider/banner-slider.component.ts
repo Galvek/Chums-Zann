@@ -1,5 +1,6 @@
 import { transition, group, animate, query, style, trigger } from '@angular/animations';
 import { Component, AfterViewInit, Input, OnDestroy } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-banner-slider',
@@ -46,6 +47,27 @@ export class BannerSliderComponent implements AfterViewInit {
   ];
   currIndex: number = 0;
   actualIndex: number = 0;
+
+  isMobileView: boolean = false;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
+      .subscribe(result => {
+        if (result.matches) {
+          if (result.breakpoints[Breakpoints.Handset]
+            || result.breakpoints[Breakpoints.HandsetLandscape]
+            || result.breakpoints[Breakpoints.HandsetPortrait]
+            || result.breakpoints[Breakpoints.Tablet]
+            || result.breakpoints[Breakpoints.TabletLandscape]
+            || result.breakpoints[Breakpoints.TabletPortrait]) {
+            this.isMobileView = true;
+          } else {
+            this.isMobileView = false;
+          }
+        }
+      });
+  }
 
   ngAfterViewInit() {
     this.intervalId = setInterval(() => {
