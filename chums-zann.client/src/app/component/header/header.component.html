@@ -1,6 +1,6 @@
 @if (!showSlimHeader) {
-<div class="headerContainer">
-  <mat-toolbar class="header">
+<div [class.headerContainer]="!isMobileView" [class.mobile-headerContainer]="isMobileView">
+  <mat-toolbar [class.header]="!isMobileView" [class.mobile-header]="isMobileView">
     <span style="flex: 2 1 auto;"></span>
     <span style="flex: 8 1 auto;"></span>
     <span style="padding-top: 8px;">
@@ -15,14 +15,14 @@
     <span><!--<a href="#" routerLink="/login">Log in</a>--></span>
   </mat-toolbar>
 
-  <img class="headerImg" src="../assets/chums-logo.jpg" />
+  <img [class.headerImg]="!isMobileView" [class.mobile-headerImg]="isMobileView" src="../assets/chums-logo.jpg" />
 
 </div>
 } @else {
 <div>
-  <div class="headerContainerSlim">
+  <div [class.headerContainerSlim]="!isMobileView" [class.mobile-headerContainerSlim]="isMobileView">
 
-    <img class="headerImgSlim" src="../assets/chums-logo.jpg" />
+    <img [class.headerImgSlim]="!isMobileView" [class.mobile-headerImgSlim]="isMobileView" src="../assets/chums-logo.jpg" />
 
   </div>
 </div>

@@ -35,3 +35,41 @@
   left: 0;
   right: 0;
 }
+
+.mobile-headerContainer {
+  min-height: 100px;
+  height: 100px;
+  background-color: black;
+}
+
+.mobile-header {
+  min-height: 25px;
+  height: 25px;
+  color: black;
+}
+
+.mobile-headerImg {
+  width: 50%;
+  height: 75px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.mobile-headerContainerSlim {
+  min-height: 75px;
+  height: 75px;
+  background-color: black;
+}
+
+.mobile-headerImgSlim {
+  width: 50%;
+  height: 75px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}

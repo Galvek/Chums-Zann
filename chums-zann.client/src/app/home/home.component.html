@@ -1,6 +1,6 @@
 <app-header class="header" (updateInventory)="changeLiqourCategory($event);"></app-header>
 
-<div class="content">
+<div [class.content]="!isMobileView" [class.mobile-content]="isMobileView">
 
   <!--consider creating a banner or something more fancy-->
   <app-banner-slider></app-banner-slider>
